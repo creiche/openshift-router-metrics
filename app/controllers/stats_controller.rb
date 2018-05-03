@@ -61,7 +61,6 @@ class StatsController < ApplicationController
   def get_router_stats(ip, port, username, password)
     ha_proxy_url="http://#{ip}:#{port}/"
     logger.debug "Connecting to url: " + ha_proxy_url
-    logger.debug "username " + username + " password " + password
     router_conn = Faraday.new(:url => ha_proxy_url)  do |faraday|
       faraday.adapter :httpclient
     end
@@ -70,6 +69,7 @@ class StatsController < ApplicationController
     be_regex = /^be_.*_([^_]*)_([^_]*)$/
 
     response = CSV.parse router_conn.get('/;csv').body, headers: true
+    logger.debug response
     response.delete_if { |row| be_regex.match(row['# pxname']).nil? }
     response['project'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[0] }
     response['route'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[1] }
