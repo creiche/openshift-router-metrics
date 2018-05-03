@@ -27,7 +27,7 @@ class StatsController < ApplicationController
         ip: item['status']['podIP'],
         name: item['metadata']['name'],
         password: item['spec']['containers'][0]['env'].find { |entry| entry['name'] == 'STATS_PASSWORD' }['value'],
-        adminusername: item['spec']['containers'][0]['env'].find { |entry| entry['name'] == 'STATS_USERNAME' }['value'],
+        username: item['spec']['containers'][0]['env'].find { |entry| entry['name'] == 'STATS_USERNAME' }['value'],
         port: item['spec']['containers'][0]['env'].find { |entry| entry['name'] == 'STATS_PORT' }['value']
       }
     }
@@ -64,7 +64,7 @@ class StatsController < ApplicationController
     router_conn = Faraday.new(:url => ha_proxy_url)  do |faraday|
       faraday.adapter :httpclient
     end
-    router_conn.basic_auth adminusername, password
+    router_conn.basic_auth username, password
 
     be_regex = /^be_.*_([^_]*)_([^_]*)$/
 
