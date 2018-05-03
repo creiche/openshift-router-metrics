@@ -66,12 +66,12 @@ class StatsController < ApplicationController
     end
     router_conn.basic_auth username, password
 
-    be_regex = /^be_.*$/
+    be_regex = /^(be_.*?):(.*?):(.*?)/
 
     response = CSV.parse router_conn.get('/;csv').body, headers: true
     response.delete_if { |row| be_regex.match(row['# pxname']).nil? }
-    response['project'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[0] }
-    response['route'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[1] }
+    response['project'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[1] }
+    response['route'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[2] }
 #    response.delete('# pxname')
     response
   end
