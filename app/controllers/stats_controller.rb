@@ -61,6 +61,7 @@ class StatsController < ApplicationController
   def get_router_stats(ip, port, username, password)
     ha_proxy_url="http://#{ip}:#{port}/"
     logger.debug "Connecting to url: " + ha_proxy_url
+    logger.debug "username " + username + " password " + password
     router_conn = Faraday.new(:url => ha_proxy_url)  do |faraday|
       faraday.adapter :httpclient
     end
