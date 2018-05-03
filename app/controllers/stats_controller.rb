@@ -73,7 +73,6 @@ class StatsController < ApplicationController
     response['project'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[0] }
     response['route'] = response['# pxname'].collect{ |pxname| be_regex.match(pxname).captures[1] }
 #    response.delete('# pxname')
-    logger.debug response
     response
   end
 
